@@ -1,0 +1,420 @@
+================================================================================
+                       TROUBLESHOOTING GUIDE
+                Common Errors and How to Fix Them
+================================================================================
+
+This guide covers all the errors you might encounter and how to solve them.
+
+================================================================================
+                      TABLE OF CONTENTS
+================================================================================
+
+1. Installation Issues
+2. Model Loading Errors
+3. Inference Errors
+4. Image Processing Errors
+5. Performance Issues
+6. Integration Errors
+7. Debugging Tips
+8. FAQ
+
+================================================================================
+                   1. INSTALLATION ISSUES
+================================================================================
+
+ERROR: "No module named 'torch'"
+---------------------------------
+Problem: PyTorch not installed
+
+Solution:
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+```
+
+For GPU support (NVIDIA):
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+```
+
+
+ERROR: "No module named 'cv2'"
+------------------------------
+Problem: OpenCV not installed
+
+Solution:
+```bash
+pip install opencv-python
+```
+
+
+ERROR: "pip: command not found"
+-------------------------------
+Problem: pip not in PATH or Python not installed
+
+Solution:
+```bash
+# Check Python version
+python --version  # Should be 3.8+
+
+# Try python -m pip
+python -m pip install -r requirements.txt
+
+# Or install pip
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+```
+
+
+ERROR: "ERROR: Failed building wheel for..."
+---------------------------------------------
+Problem: Missing system dependencies
+
+Solution (Ubuntu/Debian):
+```bash
+sudo apt-get update
+sudo apt-get install python3-dev build-essential
+```
+
+Solution (macOS):
+```bash
+xcode-select --install
+brew install python
+```
+
+
+ERROR: "Permission denied"
+--------------------------
+Problem: Installing globally without sudo
+
+Solution:
+```bash
+# Install for current user only
+pip install --user -r requirements.txt
+
+# Or use virtual environment (RECOMMENDED)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+
+================================================================================
+                  2. MODEL LOADING ERRORS
+================================================================================
+
+ERROR: "FileNotFoundError: No such file or directory: 'models/...'"
+-------------------------------------------------------------------
+Problem: Model file not found
+
+Solution:
+```python
+# Check file exists
+import os
+model_path = 'models/efficientnet_b0_best.pth'
+print(os.path.exists(model_path))  # Should print True
+
+# Use absolute path
+model_path = '/absolute/path/to/models/efficientnet_b0_best.pth'
+model = RanjanaInference('efficientnet_b0', checkpoint_path=model_path)
+```
+
+
+ERROR: "RuntimeError: PytorchStreamReader failed reading zip archive"
+----------------------------------------------------------------------
+Problem: Corrupted model file
+
+Solution:
+```bash
+# Check file size
+ls -lh models/efficientnet_b0_best.pth
+# Should be ~18 MB
+
+# If wrong size, model file is corrupted - re-copy from backup
+```
+
+
+ERROR: "KeyError: 'model_state_dict'"
+--------------------------------------
+Problem: Old checkpoint format or wrong file
+
+Solution:
+```python
+# Check what's in the checkpoint
+import torch
+checkpoint = torch.load('models/efficientnet_b0_best.pth', map_location='cpu')
+print(checkpoint.keys())
+# Should contain: 'model_state_dict', 'optimizer_state_dict', 'epoch', etc.
+```
+
+
+ERROR: "CUDA out of memory"
+---------------------------
+Problem: GPU doesn't have enough memory
+
+Solution:
+```python
+# Use CPU instead
+model = RanjanaInference('efficientnet_b0', device='cpu')
+
+# Or reduce batch size
+results = model.classify_batch(images, batch_size=16)  # Instead of 32
+```
+
+
+================================================================================
+                   3. INFERENCE ERRORS
+================================================================================
+
+ERROR: Model always predicts the same class
+--------------------------------------------
+Problem: Image preprocessing is wrong
+
+Solution:
+```python
+# Check preprocessing
+from PIL import Image
+import numpy as np
+
+img = Image.open('test.png')
+print(f'Size: {img.size}')  # Should become (64, 64)
+print(f'Mode: {img.mode}')  # Should become 'L' (grayscale)
+
+# Check normalization
+tensor, _ = model.preprocess_image('test.png')
+print(f'Min: {tensor.min():.3f}')  # Should be around -0.6
+print(f'Max: {tensor.max():.3f}')  # Should be around 1.8
+```
+
+If values are 0-1 instead, normalization is missing!
+
+
+ERROR: Low confidence on all predictions
+-----------------------------------------
+Problem: Model might not be using proper weights
+
+Solution:
+```python
+# Verify model loaded checkpoint
+checkpoint = torch.load('models/efficientnet_b0_best.pth', map_location='cpu')
+print(f'Val Accuracy: {checkpoint.get("val_accuracy", "N/A")}')
+# Should be ~99.5%
+
+# If N/A or low, checkpoint might be wrong
+```
+
+
+================================================================================
+                 4. IMAGE PROCESSING ERRORS
+================================================================================
+
+ERROR: "OSError: cannot identify image file"
+---------------------------------------------
+Problem: Invalid image format or corrupted file
+
+Solution:
+```python
+from PIL import Image
+
+try:
+    img = Image.open('test.png')
+    print(f'Format: {img.format}')  # PNG, JPEG, etc.
+except Exception as e:
+    print(f'Invalid image: {e}')
+
+# Only use PNG or JPEG
+```
+
+
+ERROR: Image appears distorted after preprocessing
+---------------------------------------------------
+Problem: Image resizing changed aspect ratio
+
+Solution:
+This is normal! Model expects 64×64 square images.
+Original aspect ratio won't be preserved.
+
+```python
+# If you need to preserve aspect ratio, pad instead:
+from PIL import Image, ImageOps
+
+img = Image.open('image.png')
+img = ImageOps.pad(img, (64, 64), color='white')  # Pad to square
+classes, probs = model.classify(img)
+```
+
+
+================================================================================
+                  5. PERFORMANCE ISSUES
+================================================================================
+
+ISSUE: Inference is very slow
+------------------------------
+Problem: Not using GPU or inefficient processing
+
+Solutions:
+
+1. Use GPU if available:
+```python
+model = RanjanaInference('efficientnet_b0', device='cuda')
+```
+
+2. Use batch processing:
+```python
+# Slow (50ms each = 5000ms total):
+for img in images:
+    result = model.classify(img)
+
+# Fast (20ms each = 2000ms total):
+results = model.classify_batch(images)  # 2.5x faster!
+```
+
+
+ISSUE: High memory usage
+-------------------------
+Problem: Processing too many images at once
+
+Solution:
+```python
+# Reduce batch size
+results = model.classify_batch(images, batch_size=16)  # Instead of 32
+```
+
+
+================================================================================
+                 6. INTEGRATION ERRORS
+================================================================================
+
+ERROR (Django): "ModuleNotFoundError: No module named 'src'"
+-------------------------------------------------------------
+Problem: Python can't find src directory
+
+Solution:
+```python
+import sys
+import os
+from django.conf import settings
+
+# Add to Python path
+sys.path.insert(0, os.path.join(settings.BASE_DIR, 'ai_models/src'))
+
+# Now import
+from inference import RanjanaInference
+```
+
+
+ERROR: Base64 decoding fails
+-----------------------------
+Problem: Invalid base64 string
+
+Solution:
+```python
+import base64
+
+try:
+    image_bytes = base64.b64decode(base64_string)
+except Exception as e:
+    return {'error': 'Invalid base64 encoding'}
+
+# Handle padding
+base64_string = base64_string.replace(' ', '+')
+if len(base64_string) % 4:
+    base64_string += '=' * (4 - len(base64_string) % 4)
+```
+
+
+================================================================================
+                    7. DEBUGGING TIPS
+================================================================================
+
+TIP 1: Test with known images
+------------------------------
+```python
+# Create simple test image
+from PIL import Image
+
+# Black square
+img = Image.new('L', (64, 64), color=0)
+classes, probs = model.classify(img)
+print(f'Black square: Class {classes[0]} ({probs[0]:.2%})')
+```
+
+
+TIP 2: Use stress test script
+------------------------------
+```bash
+# Run comprehensive tests (from main project)
+python stress_test.py
+```
+
+
+================================================================================
+                          8. FAQ
+================================================================================
+
+Q: Why are my predictions wrong?
+---------------------------------
+A: Check these in order:
+   1. Image is 64×64? (will be resized automatically)
+   2. Image is grayscale? (will be converted automatically)
+   3. Using correct model checkpoint?
+   4. Class mapping: Folder N = Class N-1
+
+
+Q: What's the difference between class ID and folder name?
+-----------------------------------------------------------
+A: Folders are numbered 1-62, model outputs 0-61.
+   Folder "1" → Model class 0
+   Folder "62" → Model class 61
+   
+   To convert: folder_name = class_id + 1
+
+
+Q: Do I need GPU for inference?
+--------------------------------
+A: No! CPU is fine for real-time inference (~50ms per image).
+   GPU is 10x faster but not necessary.
+
+
+Q: Can I use the model on non-Ranjana scripts?
+-----------------------------------------------
+A: No! Model is trained ONLY on Ranjana characters (1-62).
+
+
+Q: Why is Grad-CAM showing weird patterns?
+-------------------------------------------
+A: Grad-CAM can be noisy for very confident predictions.
+   This is normal for well-trained models.
+
+
+Q: How to update the model?
+----------------------------
+A: Replace .pth file with new one, restart application.
+   No code changes needed if architecture is same.
+
+
+================================================================================
+                        STILL STUCK?
+================================================================================
+
+1. Check the examples:
+   - examples/example_basic_usage.py
+   - examples/example_flask_api.py
+
+2. Read the integration guide:
+   - documentation/INTEGRATION_GUIDE.txt
+
+3. Check the API reference:
+   - documentation/API_REFERENCE.txt
+
+4. Common debug checklist:
+   [ ] Python version 3.8+?
+   [ ] All dependencies installed?
+   [ ] Model file exists and correct size?
+   [ ] Image file valid and accessible?
+   [ ] Using absolute paths?
+
+================================================================================
+
+END OF TROUBLESHOOTING GUIDE
+
+================================================================================

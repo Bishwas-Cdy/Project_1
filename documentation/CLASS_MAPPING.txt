@@ -1,0 +1,306 @@
+================================================================================
+                         CLASS MAPPING GUIDE
+                  Ranjana Script Character Reference
+================================================================================
+
+IMPORTANT: Folders are numbered 1-62, but model outputs 0-61!
+
+To convert:
+  - Model predicts class 0 → Folder name is "1"
+  - Model predicts class 1 → Folder name is "2"
+  - Model predicts class 61 → Folder name is "62"
+
+Formula: folder_name = predicted_class + 1
+
+================================================================================
+                     COMPLETE CLASS MAPPING
+================================================================================
+
+Model Class | Folder Name | Character Type
+------------|-------------|----------------
+     0      |      1      | Consonant
+     1      |      2      | Consonant
+     2      |      3      | Consonant
+     3      |      4      | Consonant
+     4      |      5      | Consonant
+     5      |      6      | Consonant
+     6      |      7      | Consonant
+     7      |      8      | Consonant
+     8      |      9      | Consonant
+     9      |     10      | Consonant
+    10      |     11      | Consonant
+    11      |     12      | Consonant
+    12      |     13      | Consonant
+    13      |     14      | Consonant
+    14      |     15      | Consonant
+    15      |     16      | Consonant
+    16      |     17      | Consonant
+    17      |     18      | Consonant
+    18      |     19      | Consonant
+    19      |     20      | Consonant
+    20      |     21      | Consonant
+    21      |     22      | Consonant
+    22      |     23      | Consonant
+    23      |     24      | Consonant
+    24      |     25      | Consonant
+    25      |     26      | Consonant
+    26      |     27      | Consonant
+    27      |     28      | Consonant
+    28      |     29      | Consonant
+    29      |     30      | Consonant
+    30      |     31      | Consonant
+    31      |     32      | Consonant
+    32      |     33      | Consonant
+    33      |     34      | Consonant
+    34      |     35      | Consonant
+    35      |     36      | Vowel
+    36      |     37      | Vowel
+    37      |     38      | Vowel
+    38      |     39      | Vowel
+    39      |     40      | Vowel
+    40      |     41      | Vowel
+    41      |     42      | Vowel
+    42      |     43      | Vowel
+    43      |     44      | Vowel
+    44      |     45      | Vowel
+    45      |     46      | Vowel
+    46      |     47      | Vowel
+    47      |     48      | Numeral
+    48      |     49      | Numeral
+    49      |     50      | Numeral
+    50      |     51      | Numeral
+    51      |     52      | Numeral
+    52      |     53      | Numeral
+    53      |     54      | Numeral
+    54      |     55      | Numeral
+    55      |     56      | Numeral
+    56      |     57      | Numeral
+    57      |     58      | Special
+    58      |     59      | Special
+    59      |     60      | Special
+    60      |     61      | Special
+    61      |     62      | Special
+
+================================================================================
+                      CHARACTER CATEGORIES
+================================================================================
+
+Consonants: Classes 0-34 (Folders 1-35)
+  - Total: 35 characters
+  - Most common category
+  
+Vowels: Classes 35-46 (Folders 36-47)
+  - Total: 12 characters
+  
+Numerals: Classes 47-56 (Folders 48-57)
+  - Total: 10 characters (0-9)
+  
+Special Characters: Classes 57-61 (Folders 58-62)
+  - Total: 5 characters
+  - Punctuation and special symbols
+
+================================================================================
+                      USAGE IN CODE
+================================================================================
+
+Example 1: Convert model prediction to folder name
+---------------------------------------------------
+```python
+from src.inference import RanjanaInference
+
+model = RanjanaInference('efficientnet_b0')
+classes, probs = model.classify('character.png')
+
+predicted_class = classes[0]  # e.g., 15
+folder_name = predicted_class + 1  # 16
+
+print(f'Model predicted class: {predicted_class}')
+print(f'Folder name: {folder_name}')
+```
+
+
+Example 2: Batch prediction with folder names
+----------------------------------------------
+```python
+import os
+
+image_paths = ['img1.png', 'img2.png', 'img3.png']
+results = model.classify_batch(image_paths)
+
+for img_path, (classes, probs) in zip(image_paths, results):
+    predicted_class = classes[0]
+    folder_name = predicted_class + 1
+    confidence = probs[0]
+    
+    print(f'{os.path.basename(img_path)}:')
+    print(f'  Class: {predicted_class}')
+    print(f'  Folder: {folder_name}')
+    print(f'  Confidence: {confidence:.2%}')
+```
+
+
+Example 3: Determine character type
+------------------------------------
+```python
+def get_character_type(class_id):
+    if 0 <= class_id <= 34:
+        return 'Consonant'
+    elif 35 <= class_id <= 46:
+        return 'Vowel'
+    elif 47 <= class_id <= 56:
+        return 'Numeral'
+    elif 57 <= class_id <= 61:
+        return 'Special'
+    else:
+        return 'Unknown'
+
+classes, probs = model.classify('test.png')
+predicted_class = classes[0]
+char_type = get_character_type(predicted_class)
+
+print(f'Character type: {char_type}')
+```
+
+
+Example 4: Filter by character type
+------------------------------------
+```python
+# Only classify numerals
+classes, probs = model.classify('test.png', top_k=10)
+
+numerals = []
+for cls, prob in zip(classes, probs):
+    if 47 <= cls <= 56:  # Numeral range
+        numerals.append((cls, prob))
+
+if numerals:
+    print('Numeral predictions:')
+    for cls, prob in numerals:
+        numeral_value = cls - 47  # 0-9
+        print(f'  {numeral_value}: {prob:.2%}')
+```
+
+
+================================================================================
+                    REFERENCE IMAGE NAMING
+================================================================================
+
+If you have reference images for each character:
+
+Option 1: Name by model class (0-61)
+-------------------------------------
+references/
+  ├── 0.png    # Folder 1
+  ├── 1.png    # Folder 2
+  ├── 2.png    # Folder 3
+  ...
+  └── 61.png   # Folder 62
+
+
+Option 2: Name by folder (1-62)
+--------------------------------
+references/
+  ├── 1.png
+  ├── 2.png
+  ├── 3.png
+  ...
+  └── 62.png
+
+Then when loading:
+```python
+folder_name = 15
+reference_path = f'references/{folder_name}.png'
+
+# Or from model class
+predicted_class = 14
+reference_path = f'references/{predicted_class + 1}.png'
+```
+
+
+================================================================================
+                       VALIDATION HELPER
+================================================================================
+
+Use this function to validate class/folder conversions:
+
+```python
+def validate_class_mapping(class_id=None, folder_name=None):
+    """Validate and convert between class ID and folder name."""
+    
+    if class_id is not None:
+        # Convert class to folder
+        if not (0 <= class_id <= 61):
+            raise ValueError(f'Invalid class ID: {class_id} (must be 0-61)')
+        
+        folder = class_id + 1
+        char_type = get_character_type(class_id)
+        
+        return {
+            'class_id': class_id,
+            'folder_name': folder,
+            'character_type': char_type,
+            'valid': True
+        }
+    
+    elif folder_name is not None:
+        # Convert folder to class
+        if not (1 <= folder_name <= 62):
+            raise ValueError(f'Invalid folder: {folder_name} (must be 1-62)')
+        
+        class_id = folder_name - 1
+        char_type = get_character_type(class_id)
+        
+        return {
+            'class_id': class_id,
+            'folder_name': folder_name,
+            'character_type': char_type,
+            'valid': True
+        }
+    
+    else:
+        raise ValueError('Provide either class_id or folder_name')
+
+
+# Usage
+info = validate_class_mapping(class_id=15)
+print(info)
+# {'class_id': 15, 'folder_name': 16, 'character_type': 'Consonant', 'valid': True}
+
+info = validate_class_mapping(folder_name=50)
+print(info)
+# {'class_id': 49, 'folder_name': 50, 'character_type': 'Numeral', 'valid': True}
+```
+
+
+================================================================================
+                         IMPORTANT NOTES
+================================================================================
+
+1. ALWAYS ADD 1 TO MODEL OUTPUT:
+   - Model outputs: 0-61
+   - Folder names: 1-62
+   - Don't forget this conversion!
+
+2. ARRAY INDEXING:
+   - Python arrays are 0-indexed (matches model output)
+   - Folder names are 1-indexed
+   - Be careful when iterating!
+
+3. TOP-K PREDICTIONS:
+   - All returned classes are in range 0-61
+   - Convert each one individually to folder name
+
+4. VALIDATION:
+   - Always validate class IDs are in range 0-61
+   - Always validate folder names are in range 1-62
+
+5. DATASET STRUCTURE:
+   - Training data is organized by folder (1-62)
+   - Model was trained with labels 0-61
+   - This mapping is permanent and cannot be changed
+
+================================================================================
+
+END OF CLASS MAPPING GUIDE
+
+================================================================================

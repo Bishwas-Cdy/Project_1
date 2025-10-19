@@ -1,0 +1,94 @@
+# Ranjana Script Project Configuration
+# All hyperparameters and paths in one place
+
+# Project Information
+project_name: "Ranjana Script Recognition"
+version: "0.1.0"
+description: "Handwritten Ranjana Script character recognition with similarity scoring"
+
+# Paths
+paths:
+  data_dir: "data/Ranjana 64"
+  train_dir: "1 Training"
+  val_dir: "2 Validation"
+  test_dir: "3 Testing"
+  models_dir: "models"
+  logs_dir: "logs"
+  outputs_dir: "outputs"
+  stats_file: "data/dataset_stats.npz"  # For mean/std normalization
+
+# Dataset
+dataset:
+  num_classes: 62
+  image_size: [64, 64]
+  num_channels: 1  # Grayscale
+  
+# Data Augmentation
+augmentation:
+  rotation_range: 10        # degrees
+  width_shift_range: 0.1    # fraction of total width
+  height_shift_range: 0.1   # fraction of total height
+  zoom_range: 0.1           # [1-zoom, 1+zoom]
+  brightness_range: 0.1     # ±10%
+  horizontal_flip: false    # Don't flip handwriting
+
+# Training Hyperparameters
+training:
+  batch_size: 64
+  learning_rate: 0.001
+  epochs: 100
+  early_stopping_patience: 10
+  lr_reduction_patience: 5
+  lr_reduction_factor: 0.5
+  
+# Optimizer
+optimizer:
+  type: "adam"  # adam, sgd, adamw
+  weight_decay: 0.0001
+  momentum: 0.9  # Only for SGD
+  
+# Model Architecture
+model:
+  # Options: custom_cnn, vgg16, resnet18, resnet34, resnet50, efficientnet_b0, efficientnet_b1
+  architecture: "custom_cnn"
+  pretrained: true
+  dropout: 0.5
+
+# Reproducibility
+seed: 42
+
+# Hardware
+hardware:
+  device: "cuda"  # cuda, cpu, auto
+  num_workers: 4
+  pin_memory: true
+  mixed_precision: true  # Use AMP for faster training
+  gpu_memory_fraction: 0.9  # Use only 90% GPU memory to prevent laptop shutdown
+
+# Logging & Checkpointing
+logging:
+  use_tensorboard: true
+  log_interval: 10  # Log every N batches
+  save_best_only: true
+  save_frequency: 1  # Save checkpoint every N epochs
+  
+# Evaluation
+evaluation:
+  top_k: 5  # For top-k accuracy
+  save_confusion_matrix: true
+  save_per_class_metrics: true
+  save_predictions: false  # Save all predictions (large file)
+  
+# Experiment Tracking
+experiment:
+  run_name: null  # Auto-generated if null: YYYYMMDD_HHMM_<model>_<seed>
+  tags: []
+  notes: ""
+
+# Siamese Network (Branch 2)
+siamese:
+  embedding_dim: 128
+  margin: 1.0  # Contrastive loss margin
+  pairs_per_class: 200  # Number of positive pairs per class (increased for experiment B)
+  similarity_metric: "cosine"  # cosine or euclidean
+  similarity_threshold: 0.5  # Threshold for binary classification
