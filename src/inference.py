@@ -125,7 +125,7 @@ class RanjanaInference:
             self.siamese_model = self.siamese_model.to(self.device)
             self.siamese_model.eval()
             self.optimal_threshold = 0.45  # From evaluation results
-            print("✓ Siamese model loaded")
+            print(" Siamese model loaded")
         
         # Preprocess both images
         img1_tensor, _ = self.preprocess_image(image1_path)
@@ -240,7 +240,7 @@ def visualize_predictions(image_path: str, top_classes, top_probs, save_path: st
     
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✓ Saved visualization to {save_path}")
+        print(f" Saved visualization to {save_path}")
     else:
         plt.show()
     

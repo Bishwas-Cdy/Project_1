@@ -291,7 +291,7 @@ def main():
         checkpoint_path='models/efficientnet_b0_best.pth',
         device='auto'
     )
-    print("✓ Model loaded successfully")
+    print(" Model loaded successfully")
     
     # Example 1: Process a directory
     print("\n" + "="*60)

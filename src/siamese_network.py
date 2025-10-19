@@ -14,8 +14,8 @@ class SiameseNetwork(nn.Module):
     
     Architecture:
         Input: Two images (img1, img2)
-        → Shared Encoder → Feature vectors (embedding1, embedding2)
-        → Distance computation → Similarity score
+        -> Shared Encoder -> Feature vectors (embedding1, embedding2)
+        -> Distance computation -> Similarity score
     """
     
     def __init__(self, backbone='efficientnet_b0', embedding_dim=128, pretrained_path=None):
@@ -38,7 +38,7 @@ class SiameseNetwork(nn.Module):
             print(f"Loading pretrained weights from {pretrained_path}")
             checkpoint = torch.load(pretrained_path, map_location='cpu')
             base_model.load_state_dict(checkpoint['model_state_dict'])
-            print("✓ Loaded pretrained classification model")
+            print(" Loaded pretrained classification model")
         
         # Remove classification head and extract feature extractor
         if 'efficientnet' in backbone:
@@ -79,7 +79,7 @@ class SiameseNetwork(nn.Module):
             nn.LayerNorm(embedding_dim)  # Normalize embeddings
         )
         
-        print(f"✓ Siamese Network initialized:")
+        print(f" Siamese Network initialized:")
         print(f"  - Backbone: {backbone}")
         print(f"  - Feature dim: {feature_dim}")
         print(f"  - Embedding dim: {embedding_dim}")
@@ -124,7 +124,7 @@ class SiameseNetwork(nn.Module):
             similarity = (similarity + 1) / 2
         
         elif metric == 'euclidean':
-            # Euclidean distance → similarity
+            # Euclidean distance -> similarity
             distance = F.pairwise_distance(embedding1, embedding2)
             # Convert distance to similarity (inverse)
             similarity = 1 / (1 + distance)
@@ -210,4 +210,4 @@ if __name__ == "__main__":
     loss = criterion(emb1, emb2, labels)
     print(f"\nContrastive Loss: {loss.item():.4f}")
     
-    print("\n✓ Siamese Network test passed!")
+    print("\n Siamese Network test passed!")

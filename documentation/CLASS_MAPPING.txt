@@ -6,9 +6,9 @@
 IMPORTANT: Folders are numbered 1-62, but model outputs 0-61!
 
 To convert:
-  - Model predicts class 0 → Folder name is "1"
-  - Model predicts class 1 → Folder name is "2"
-  - Model predicts class 61 → Folder name is "62"
+  - Model predicts class 0 -> Folder name is "1"
+  - Model predicts class 1 -> Folder name is "2"
+  - Model predicts class 61 -> Folder name is "62"
 
 Formula: folder_name = predicted_class + 1
 
@@ -190,21 +190,21 @@ If you have reference images for each character:
 Option 1: Name by model class (0-61)
 -------------------------------------
 references/
-  ├── 0.png    # Folder 1
-  ├── 1.png    # Folder 2
-  ├── 2.png    # Folder 3
+   0.png    # Folder 1
+   1.png    # Folder 2
+   2.png    # Folder 3
   ...
-  └── 61.png   # Folder 62
+   61.png   # Folder 62
 
 
 Option 2: Name by folder (1-62)
 --------------------------------
 references/
-  ├── 1.png
-  ├── 2.png
-  ├── 3.png
+   1.png
+   2.png
+   3.png
   ...
-  └── 62.png
+   62.png
 
 Then when loading:
 ```python

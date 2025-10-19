@@ -27,7 +27,7 @@ classifier = RanjanaInference(
     checkpoint_path='models/efficientnet_b0_best.pth',
     device='cpu'  # Change to 'cuda' if GPU available
 )
-print("✓ Models loaded!")
+print(" Models loaded!")
 
 
 def decode_base64_image(base64_string):

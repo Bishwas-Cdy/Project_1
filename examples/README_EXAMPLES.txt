@@ -9,17 +9,17 @@ how to use the Ranjana Script AI models.
 Think of these as "copy-paste starting points" for integration!
 
 ================================================================================
-                    📁 WHAT'S IN THIS DIRECTORY
+                     WHAT'S IN THIS DIRECTORY
 ================================================================================
 
 examples/
-├── example_basic_usage.py          ← START HERE! Quick test
-├── example_flask_api.py            ← REST API for backend
-├── example_batch_processing.py     ← Process multiple images
-└── README_EXAMPLES.txt             ← THIS FILE!
+ example_basic_usage.py          <- START HERE! Quick test
+ example_flask_api.py            <- REST API for backend
+ example_batch_processing.py     <- Process multiple images
+ README_EXAMPLES.txt             <- THIS FILE!
 
 ================================================================================
-              1️⃣ example_basic_usage.py - "Hello World"
+              1⃣ example_basic_usage.py - "Hello World"
 ================================================================================
 
 PURPOSE: Quick test to verify everything works
@@ -27,17 +27,17 @@ PURPOSE: Quick test to verify everything works
 WHAT IT DOES:
 - Creates a dummy test image
 - Tests all 3 features:
-  1. Classification → "What character is this?"
-  2. Similarity → "How similar are these two?"
-  3. Grad-CAM → "What is the model looking at?"
+  1. Classification -> "What character is this?"
+  2. Similarity -> "How similar are these two?"
+  3. Grad-CAM -> "What is the model looking at?"
 - Prints results to terminal
 - Saves Grad-CAM visualization
 
 WHEN TO USE:
-✓ First thing after installation (verify models work)
-✓ Learning how the API works
-✓ Quick reference for basic code
-✓ Teaching teammates the basics
+ First thing after installation (verify models work)
+ Learning how the API works
+ Quick reference for basic code
+ Teaching teammates the basics
 
 HOW TO RUN:
 ```bash
@@ -48,16 +48,16 @@ python examples/example_basic_usage.py
 EXPECTED OUTPUT:
 ```
 Loading models...
-✓ Models loaded successfully
+ Models loaded successfully
 
 ======================================================================
 EXAMPLE 1: CLASSIFICATION
 ======================================================================
-✓ Image: sample_image.png
-✓ Predicted Class: 23
-✓ Confidence: 87.45%
+ Image: sample_image.png
+ Predicted Class: 23
+ Confidence: 87.45%
 
-✓ Top 5 Predictions:
+ Top 5 Predictions:
    1. Class 23: 87.45%
    2. Class 15: 5.23%
    3. Class 8: 2.11%
@@ -67,19 +67,19 @@ EXAMPLE 1: CLASSIFICATION
 ======================================================================
 EXAMPLE 2: SIMILARITY COMPARISON
 ======================================================================
-✓ Image 1: sample_image.png
-✓ Image 2: sample_image.png
-✓ Similarity Score: 100.0%
-✓ Distance: 0.0000
-✓ Match: Yes! ✓ (threshold: 0.45)
+ Image 1: sample_image.png
+ Image 2: sample_image.png
+ Similarity Score: 100.0%
+ Distance: 0.0000
+ Match: Yes!  (threshold: 0.45)
 
 ======================================================================
 EXAMPLE 3: GRAD-CAM VISUALIZATION
 ======================================================================
-✓ Image: sample_image.png
-✓ Predicted Class: 23
-✓ Confidence: 87.45%
-✓ Grad-CAM saved to: gradcam_visualization.png
+ Image: sample_image.png
+ Predicted Class: 23
+ Confidence: 87.45%
+ Grad-CAM saved to: gradcam_visualization.png
 ```
 
 CODE SNIPPET YOU CAN COPY:
@@ -103,7 +103,7 @@ print(f"Saved to: {result['save_path']}")
 ```
 
 ================================================================================
-            2️⃣ example_flask_api.py - REST API Server
+            2⃣ example_flask_api.py - REST API Server
 ================================================================================
 
 PURPOSE: Production-ready REST API for Django/Flask backend
@@ -117,17 +117,17 @@ WHAT IT DOES:
 
 API ENDPOINTS:
 ```
-POST /api/classify    → Classify character
-POST /api/similarity  → Compare two characters
-POST /api/gradcam     → Generate heatmap visualization
-GET  /health          → Check if server is running
+POST /api/classify    -> Classify character
+POST /api/similarity  -> Compare two characters
+POST /api/gradcam     -> Generate heatmap visualization
+GET  /health          -> Check if server is running
 ```
 
 WHEN TO USE:
-✓ When Flutter developers need a backend API
-✓ When you want models on the server (not mobile)
-✓ As a starting point for your Django integration
-✓ For web-based applications
+ When Flutter developers need a backend API
+ When you want models on the server (not mobile)
+ As a starting point for your Django integration
+ For web-based applications
 
 HOW TO RUN:
 ```bash
@@ -144,7 +144,7 @@ python examples/example_flask_api.py
 EXPECTED OUTPUT:
 ```
 Loading models...
-✓ Models loaded!
+ Models loaded!
  * Running on http://127.0.0.1:5000
  * Press CTRL+C to quit
 ```
@@ -193,7 +193,7 @@ DJANGO ADAPTATION:
 - See documentation/INTEGRATION_GUIDE.txt for full Django example
 
 ================================================================================
-         3️⃣ example_batch_processing.py - Process Multiple Images
+         3⃣ example_batch_processing.py - Process Multiple Images
 ================================================================================
 
 PURPOSE: Efficiently process hundreds/thousands of images at once
@@ -252,18 +252,18 @@ generate_gradcam_for_directory('images/', 'outputs/')
 Creates:
 ```
 outputs/
-├── gradcam_img1.png
-├── gradcam_img2.png
-├── gradcam_img3.png
+ gradcam_img1.png
+ gradcam_img2.png
+ gradcam_img3.png
 ...
 ```
 
 WHEN TO USE:
-✓ Evaluating student submissions (100+ images)
-✓ Testing model on entire dataset
-✓ Batch grading/scoring
-✓ Creating visualizations for analysis
-✓ Performance benchmarking
+ Evaluating student submissions (100+ images)
+ Testing model on entire dataset
+ Batch grading/scoring
+ Creating visualizations for analysis
+ Performance benchmarking
 
 HOW TO RUN:
 ```bash
@@ -280,7 +280,7 @@ Ranjana Script - Batch Processing Examples
 ============================================================
 
 1. Initializing model...
-✓ Model loaded successfully
+ Model loaded successfully
 
 ============================================================
 EXAMPLE 1: Classify All Images in Directory
@@ -337,23 +337,23 @@ for img_path, (classes, probs) in zip(images, results):
 ```
 
 ================================================================================
-                  🎯 WHICH EXAMPLE TO USE WHEN
+                   WHICH EXAMPLE TO USE WHEN
 ================================================================================
 
 YOUR TEAMMATE SAYS...                    USE THIS EXAMPLE
-────────────────────────────────────────────────────────────────────────
-"Just want to test if models work"    → example_basic_usage.py
-"Need to learn the API"               → example_basic_usage.py
-"Building Flutter app backend"        → example_flask_api.py
-"Need REST API endpoints"             → example_flask_api.py
-"Creating Django web service"         → example_flask_api.py
-"Have 1000 student images to grade"   → example_batch_processing.py
-"Need to compare students vs refs"    → example_batch_processing.py
-"Want to analyze model on dataset"    → example_batch_processing.py
-"Need performance metrics"            → example_batch_processing.py
+
+"Just want to test if models work"    -> example_basic_usage.py
+"Need to learn the API"               -> example_basic_usage.py
+"Building Flutter app backend"        -> example_flask_api.py
+"Need REST API endpoints"             -> example_flask_api.py
+"Creating Django web service"         -> example_flask_api.py
+"Have 1000 student images to grade"   -> example_batch_processing.py
+"Need to compare students vs refs"    -> example_batch_processing.py
+"Want to analyze model on dataset"    -> example_batch_processing.py
+"Need performance metrics"            -> example_batch_processing.py
 
 ================================================================================
-                      💡 TYPICAL WORKFLOW
+                       TYPICAL WORKFLOW
 ================================================================================
 
 STEP 1: Test Installation
@@ -387,7 +387,7 @@ Goal: Process large datasets efficiently
 Time: As needed
 
 ================================================================================
-                      🔧 CUSTOMIZATION TIPS
+                       CUSTOMIZATION TIPS
 ================================================================================
 
 MODIFY FOR YOUR NEEDS:
@@ -425,7 +425,7 @@ classes, probs = model.classify(image, top_k=10)  # Default: 5
 ```
 
 ================================================================================
-                      ❓ COMMON QUESTIONS
+                       COMMON QUESTIONS
 ================================================================================
 
 Q: Do I need to run these examples?
@@ -451,26 +451,26 @@ Q: Can I deploy the API to Heroku/AWS?
 A: Yes! example_flask_api.py can be deployed anywhere Flask works.
 
 ================================================================================
-                      📚 ADDITIONAL RESOURCES
+                       ADDITIONAL RESOURCES
 ================================================================================
 
 For more information, see:
 
 - API Reference: ../documentation/API_REFERENCE.txt
-  → Complete function documentation
+  -> Complete function documentation
 
 - Integration Guide: ../documentation/INTEGRATION_GUIDE.txt
-  → Step-by-step Flutter & Django integration
+  -> Step-by-step Flutter & Django integration
 
 - Troubleshooting: ../documentation/TROUBLESHOOTING.txt
-  → Common errors and solutions
+  -> Common errors and solutions
 
 - Main README: ../README.txt
-  → Quick start and overview
+  -> Quick start and overview
 
 ================================================================================
 
-HAPPY CODING! 🚀
+HAPPY CODING! 
 
 If you get stuck, check the documentation/ folder or contact Bishwas.
 

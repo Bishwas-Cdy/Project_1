@@ -65,19 +65,19 @@ pip install torch torchvision pillow numpy opencv-python
 Step 2: Copy Files to Your Django Project
 ```
 your_django_project/
-├── ai_models/                    ← Create this folder
-│   ├── models/
-│   │   ├── efficientnet_b0_best.pth
-│   │   └── siamese_efficientnet_b0_best.pth
-│   └── src/
-│       ├── inference.py
-│       ├── gradcam.py
-│       ├── siamese_network.py
-│       ├── models.py
-│       ├── config.py
-│       └── data_loader.py
-└── your_app/
-    └── views.py               ← Add AI endpoints here
+ ai_models/                    <- Create this folder
+    models/
+       efficientnet_b0_best.pth
+       siamese_efficientnet_b0_best.pth
+    src/
+        inference.py
+        gradcam.py
+        siamese_network.py
+        models.py
+        config.py
+        data_loader.py
+ your_app/
+     views.py               <- Add AI endpoints here
 ```
 
 Step 3: Create Django Views
@@ -232,14 +232,14 @@ OPTION A: Call Backend API (RECOMMENDED FOR BEGINNERS)
 -------------------------------------------------------
 
 Pros:
-✓ Easy to implement
-✓ No model conversion needed
-✓ Models stay updated on server
-✓ Works immediately
+ Easy to implement
+ No model conversion needed
+ Models stay updated on server
+ Works immediately
 
 Cons:
-✗ Requires internet connection
-✗ Slower (network latency)
+ Requires internet connection
+ Slower (network latency)
 
 Flutter Code:
 ```dart
@@ -315,14 +315,14 @@ OPTION B: On-Device Inference (ADVANCED)
 -----------------------------------------
 
 Pros:
-✓ Works offline
-✓ Faster (no network)
-✓ More private
+ Works offline
+ Faster (no network)
+ More private
 
 Cons:
-✗ Requires model conversion
-✗ More complex setup
-✗ Larger app size
+ Requires model conversion
+ More complex setup
+ Larger app size
 
 See Section 4 below for conversion steps!
 
@@ -333,7 +333,7 @@ See Section 4 below for conversion steps!
 FOR FLUTTER ON-DEVICE:
 ----------------------
 
-Step 1: Convert PyTorch → ONNX
+Step 1: Convert PyTorch -> ONNX
 ```python
 import torch
 from src.models import get_model
@@ -362,10 +362,10 @@ torch.onnx.export(
     }
 )
 
-print("✓ Exported to efficientnet_b0.onnx")
+print(" Exported to efficientnet_b0.onnx")
 ```
 
-Step 2: Convert ONNX → TFLite
+Step 2: Convert ONNX -> TFLite
 ```bash
 # Install converter
 pip install onnx-tf tensorflow
@@ -381,7 +381,7 @@ converter.optimizations = [tf.lite.Optimize.DEFAULT]
 tflite_model = converter.convert()
 with open('efficientnet_b0.tflite', 'wb') as f:
     f.write(tflite_model)
-print('✓ Converted to TFLite')
+print(' Converted to TFLite')
 "
 ```
 
@@ -430,10 +430,10 @@ class RanjanaClassifier {
 
 IMAGE FORMAT:
 -------------
-✓ Accept: PNG, JPEG, base64
-✓ Resize to 64×64 on server
-✓ Convert to grayscale
-✓ Return clear error messages
+ Accept: PNG, JPEG, base64
+ Resize to 64×64 on server
+ Convert to grayscale
+ Return clear error messages
 
 RESPONSE FORMAT:
 ----------------
@@ -482,7 +482,7 @@ If your server has GPU:
 classifier = RanjanaInference(
     'efficientnet_b0',
     checkpoint_path='...',
-    device='cuda'  # ← Use GPU
+    device='cuda'  # <- Use GPU
 )
 # 10-20x faster on GPU!
 ```
@@ -503,7 +503,7 @@ quantized_model = torch.quantization.quantize_dynamic(
 
 # Save
 torch.save(quantized_model, 'efficientnet_b0_quantized.pth')
-# Size: 18 MB → 5 MB!
+# Size: 18 MB -> 5 MB!
 ```
 
 ================================================================================
@@ -558,8 +558,8 @@ Frontend (Flutter):
 [ ] Works on Android and iOS
 
 End-to-End:
-[ ] Student draws character → camera → classify → correct result
-[ ] Compare student vs reference → similarity score makes sense
+[ ] Student draws character -> camera -> classify -> correct result
+[ ] Compare student vs reference -> similarity score makes sense
 [ ] Grad-CAM shows reasonable attention regions
 [ ] App works offline (if using on-device models)
 [ ] App works with slow network (if using API)
@@ -591,8 +591,8 @@ THINGS I HAVEN'T TOLD YOU (BUT YOU SHOULD KNOW):
 -------------------------------------------------
 
 1. CLASS MAPPING: Folders are 1-62, but model outputs 0-61!
-   - Folder "1" → Model predicts 0
-   - Folder "2" → Model predicts 1
+   - Folder "1" -> Model predicts 0
+   - Folder "2" -> Model predicts 1
    - etc.
    - So: displayed_class = predicted_class + 1
 
@@ -625,7 +625,7 @@ THINGS I HAVEN'T TOLD YOU (BUT YOU SHOULD KNOW):
 
 ================================================================================
 
-GOOD LUCK WITH YOUR INTEGRATION! 🚀
+GOOD LUCK WITH YOUR INTEGRATION! 
 
 If you get stuck, check:
 1. documentation/TROUBLESHOOTING.txt

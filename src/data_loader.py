@@ -100,7 +100,7 @@ def get_transforms(augment: bool = False, use_dataset_stats: bool = True) -> tra
         except:
             # Fallback to default
             mean, std = 0.5, 0.5
-            print("⚠ Using default normalization (0.5, 0.5)")
+            print(" Using default normalization (0.5, 0.5)")
     else:
         mean, std = 0.5, 0.5
     

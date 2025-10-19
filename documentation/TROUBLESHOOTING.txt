@@ -363,8 +363,8 @@ A: Check these in order:
 Q: What's the difference between class ID and folder name?
 -----------------------------------------------------------
 A: Folders are numbered 1-62, model outputs 0-61.
-   Folder "1" → Model class 0
-   Folder "62" → Model class 61
+   Folder "1" -> Model class 0
+   Folder "62" -> Model class 61
    
    To convert: folder_name = class_id + 1
 

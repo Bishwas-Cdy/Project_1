@@ -391,7 +391,7 @@ for path, (classes, probs) in zip(image_paths, results):
     predicted = classes[0]
     confidence = probs[0]
     
-    # Extract true class from path (e.g., "dataset/test/5/img.png" → class 4)
+    # Extract true class from path (e.g., "dataset/test/5/img.png" -> class 4)
     true_class = int(os.path.basename(os.path.dirname(path))) - 1
     
     if predicted == true_class:

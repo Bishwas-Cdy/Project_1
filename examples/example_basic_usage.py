@@ -18,7 +18,7 @@ def create_sample_image():
     # Create a simple image (you should use real Ranjana character images)
     img = np.random.randint(0, 255, (64, 64), dtype=np.uint8)
     Image.fromarray(img).save('sample_image.png')
-    print("✓ Created sample_image.png")
+    print(" Created sample_image.png")
     return 'sample_image.png'
 
 
@@ -30,10 +30,10 @@ def example_1_classification(model, image_path):
     
     classes, probs = model.classify(image_path)
     
-    print(f"\n✓ Image: {image_path}")
-    print(f"✓ Predicted Class: {classes[0]}")
-    print(f"✓ Confidence: {probs[0]:.2%}")
-    print(f"\n✓ Top 5 Predictions:")
+    print(f"\n Image: {image_path}")
+    print(f" Predicted Class: {classes[0]}")
+    print(f" Confidence: {probs[0]:.2%}")
+    print(f"\n Top 5 Predictions:")
     for i, (cls, prob) in enumerate(zip(classes, probs), 1):
         print(f"   {i}. Class {cls}: {prob:.2%}")
     
@@ -48,11 +48,11 @@ def example_2_similarity(model, image1_path, image2_path):
     
     similarity, distance = model.compute_similarity(image1_path, image2_path)
     
-    print(f"\n✓ Image 1: {image1_path}")
-    print(f"✓ Image 2: {image2_path}")
-    print(f"✓ Similarity Score: {similarity:.1f}%")
-    print(f"✓ Distance: {distance:.4f}")
-    print(f"✓ Match: {'Yes! ✓' if distance < 0.45 else 'No ✗'} (threshold: 0.45)")
+    print(f"\n Image 1: {image1_path}")
+    print(f" Image 2: {image2_path}")
+    print(f" Similarity Score: {similarity:.1f}%")
+    print(f" Distance: {distance:.4f}")
+    print(f" Match: {'Yes! ' if distance < 0.45 else 'No '} (threshold: 0.45)")
     
     return similarity, distance
 
@@ -68,12 +68,12 @@ def example_3_gradcam(model, image_path):
         save_path='gradcam_output.png'
     )
     
-    print(f"\n✓ Image: {image_path}")
-    print(f"✓ Predicted Class: {result['predicted_class']}")
-    print(f"✓ Confidence: {result['confidence']:.2%}")
-    print(f"✓ Heatmap saved to: gradcam_output.png")
-    print(f"✓ CAM shape: {result['cam'].shape}")
-    print(f"✓ Overlay shape: {result['overlay'].shape}")
+    print(f"\n Image: {image_path}")
+    print(f" Predicted Class: {result['predicted_class']}")
+    print(f" Confidence: {result['confidence']:.2%}")
+    print(f" Heatmap saved to: gradcam_output.png")
+    print(f" CAM shape: {result['cam'].shape}")
+    print(f" Overlay shape: {result['overlay'].shape}")
     
     return result
 
@@ -84,7 +84,7 @@ def main():
     print("="*70)
     
     # Initialize model
-    print("\n📦 Loading models...")
+    print("\n Loading models...")
     print("(This may take a few seconds on first run)")
     
     model = RanjanaInference(
@@ -93,7 +93,7 @@ def main():
         device='cpu'  # Change to 'cuda' if you have GPU
     )
     
-    print("✓ Models loaded successfully!")
+    print(" Models loaded successfully!")
     
     # Create sample images for testing
     # NOTE: Replace these with real Ranjana character images!
@@ -112,12 +112,12 @@ def main():
     
     # Summary
     print("\n" + "="*70)
-    print("✅ ALL EXAMPLES COMPLETED!")
+    print(" ALL EXAMPLES COMPLETED!")
     print("="*70)
-    print(f"\n✓ Classification: Class {pred_class} ({confidence:.2%} confidence)")
-    print(f"✓ Similarity: {similarity:.1f}%")
-    print(f"✓ Grad-CAM: Saved to gradcam_output.png")
-    print("\n✓ Everything is working! You're ready to integrate! 🎉")
+    print(f"\n Classification: Class {pred_class} ({confidence:.2%} confidence)")
+    print(f" Similarity: {similarity:.1f}%")
+    print(f" Grad-CAM: Saved to gradcam_output.png")
+    print("\n Everything is working! You're ready to integrate! ")
     print("\nNEXT STEPS:")
     print("1. Replace sample_image.png with real Ranjana character images")
     print("2. See example_flask_api.py for REST API example")
