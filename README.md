@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**Production-Ready Deep Learning Models for Ranjana Script Character Recognition**
+** Deep Learning Models for Ranjana Script Character Recognition**
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red.svg)](https://pytorch.org/)
@@ -30,11 +30,12 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This deployment package provides state-of-the-art deep learning models for Ranjana script character recognition and analysis. The system achieves **99.5% classification accuracy** and **92.7% similarity detection accuracy** on the Ranjana-64 benchmark dataset.
 
 The package includes:
+
 - Pre-trained EfficientNet-B0 models
 - Complete Python inference API
 - REST API examples for web/mobile integration
@@ -43,27 +44,27 @@ The package includes:
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### Three Core Capabilities
 
-| Feature | Description | Accuracy | Speed (CPU) |
-|---------|-------------|----------|-------------|
-| **Classification** | Identifies which of 62 Ranjana characters | 99.5% | ~50ms |
-| **Similarity Scoring** | Compares visual similarity between characters | 92.7% | ~100ms |
-| **Grad-CAM Visualization** | Shows model attention regions for interpretability | N/A | ~60ms |
+| Feature                    | Description                                        | Accuracy | Speed (CPU) |
+| -------------------------- | -------------------------------------------------- | -------- | ----------- |
+| **Classification**         | Identifies which of 62 Ranjana characters          | 99.5%    | ~50ms       |
+| **Similarity Scoring**     | Compares visual similarity between characters      | 92.7%    | ~100ms      |
+| **Grad-CAM Visualization** | Shows model attention regions for interpretability | N/A      | ~60ms       |
 
 ### Technical Highlights
 
-- ⚡ **Fast Inference**: Real-time performance on CPU, 10x faster on GPU
-- 🎯 **High Accuracy**: Extensively validated with stress testing
-- 📦 **Easy Integration**: Simple Python API, REST endpoints included
-- 🔧 **Flexible Deployment**: Backend API or on-device (ONNX/TFLite)
-- 📚 **Well Documented**: Complete API reference and integration guides
+- **Fast Inference**: Real-time performance on CPU, 10x faster on GPU
+- **High Accuracy**: Extensively validated with stress testing
+- **Easy Integration**: Simple Python API, REST endpoints included
+- **Flexible Deployment**: Backend API or on-device (ONNX/TFLite)
+- **Well Documented**: Complete API reference and integration guides
 
 ---
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 ### Classification Model (EfficientNet-B0)
 
@@ -88,15 +89,15 @@ Model Size:           25 MB
 
 ### Inference Latency
 
-| Hardware | Classification | Similarity | Grad-CAM |
-|----------|---------------|------------|----------|
-| CPU (Intel i7) | 50ms | 100ms | 60ms |
-| GPU (CUDA) | 5ms | 10ms | 8ms |
-| Batch (32 images) | 20ms/img | 50ms/pair | 25ms/img |
+| Hardware          | Classification | Similarity | Grad-CAM |
+| ----------------- | -------------- | ---------- | -------- |
+| CPU (Intel i7)    | 50ms           | 100ms      | 60ms     |
+| GPU (CUDA)        | 5ms            | 10ms       | 8ms      |
+| Batch (32 images) | 20ms/img       | 50ms/pair  | 25ms/img |
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
@@ -113,6 +114,7 @@ pip install -r requirements.txt
 ```
 
 **Dependencies:**
+
 - PyTorch 2.0+
 - torchvision 0.15+
 - Pillow 9.0+
@@ -129,7 +131,7 @@ Expected output: Model loads successfully and runs inference on test images.
 
 ---
 
-## 🎓 Quick Start
+## Quick Start
 
 ### Basic Classification
 
@@ -169,7 +171,7 @@ print(f"Confidence: {result['confidence']:.2%}")
 
 ---
 
-## 📖 API Reference
+## API Reference
 
 ### RanjanaInference Class
 
@@ -188,18 +190,22 @@ model = RanjanaInference(
 #### Methods
 
 **classify(image_path, top_k=5)**
+
 - Classifies a character image
 - Returns: `(classes, probabilities)` - NumPy arrays of shape (top_k,)
 
 **compute_similarity(image1_path, image2_path)**
+
 - Computes similarity between two images
 - Returns: `(similarity_score, distance)` - Percentage (0-100) and Euclidean distance
 
 **generate_gradcam(image_path, target_class=None, save_path=None)**
+
 - Generates Grad-CAM visualization
 - Returns: Dictionary with keys: `cam`, `overlay`, `predicted_class`, `confidence`
 
 **classify_batch(image_paths, top_k=5, batch_size=32)**
+
 - Efficiently processes multiple images
 - Returns: List of (classes, probabilities) tuples
 
@@ -207,7 +213,7 @@ For complete API documentation, see [`documentation/API_REFERENCE.txt`](document
 
 ---
 
-## 🔗 Integration Guides
+## Integration Guides
 
 ### Flask/Django Backend
 
@@ -222,9 +228,9 @@ model = RanjanaInference('efficientnet_b0')
 def classify():
     image_file = request.files['image']
     image_file.save('/tmp/temp.png')
-    
+
     classes, probs = model.classify('/tmp/temp.png')
-    
+
     return jsonify({
         'predicted_class': int(classes[0]),
         'confidence': float(probs[0])
@@ -255,7 +261,7 @@ See [`documentation/INTEGRATION_GUIDE.txt`](documentation/INTEGRATION_GUIDE.txt)
 
 ---
 
-## 🏗️ Model Architecture
+## Model Architecture
 
 ### Classification Model
 
@@ -289,7 +295,7 @@ Gradient-weighted Class Activation Mapping
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 DEPLOYMENT_PACKAGE/
@@ -323,18 +329,18 @@ DEPLOYMENT_PACKAGE/
 
 ---
 
-## 📚 Documentation
+## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [API Reference](documentation/API_REFERENCE.txt) | Complete function documentation with examples |
-| [Integration Guide](documentation/INTEGRATION_GUIDE.txt) | Flask, Django, and Flutter integration steps |
-| [Troubleshooting](documentation/TROUBLESHOOTING.txt) | Common errors and solutions |
-| [Class Mapping](documentation/CLASS_MAPPING.txt) | Character class ID mappings (0-61) |
+| Document                                                 | Description                                   |
+| -------------------------------------------------------- | --------------------------------------------- |
+| [API Reference](documentation/API_REFERENCE.txt)         | Complete function documentation with examples |
+| [Integration Guide](documentation/INTEGRATION_GUIDE.txt) | Flask, Django, and Flutter integration steps  |
+| [Troubleshooting](documentation/TROUBLESHOOTING.txt)     | Common errors and solutions                   |
+| [Class Mapping](documentation/CLASS_MAPPING.txt)         | Character class ID mappings (0-61)            |
 
 ---
 
-## 🎯 Use Cases
+## Use Cases
 
 - **Educational Apps**: Automated grading of student handwriting
 - **OCR Systems**: Character recognition in scanned documents
@@ -344,27 +350,27 @@ DEPLOYMENT_PACKAGE/
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Edit `config.yaml` to customize:
 
 ```yaml
 dataset:
-  image_size: 64        # Input image dimensions
-  num_classes: 62       # Number of character classes
+  image_size: 64 # Input image dimensions
+  num_classes: 62 # Number of character classes
 
 model:
   architecture: efficientnet_b0
-  device: auto          # 'auto', 'cpu', or 'cuda'
+  device: auto # 'auto', 'cpu', or 'cuda'
 
 inference:
-  similarity_threshold: 0.45  # Distance threshold for matching
-  batch_size: 32             # Batch processing size
+  similarity_threshold: 0.45 # Distance threshold for matching
+  batch_size: 32 # Batch processing size
 ```
 
 ---
 
-## 🔧 Advanced Usage
+## Advanced Usage
 
 ### Batch Processing
 
@@ -403,21 +409,24 @@ classes, probs = model.classify(image)
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
 **ModuleNotFoundError: No module named 'torch'**
+
 ```bash
 pip install -r requirements.txt
 ```
 
 **CUDA out of memory**
+
 ```python
 model = RanjanaInference('efficientnet_b0', device='cpu')
 ```
 
 **Wrong predictions**
+
 - Ensure images are 64x64 pixels (auto-resized)
 - Verify grayscale conversion (automatic)
 - Check class mapping: Model outputs 0-61, folders are 1-62
@@ -426,36 +435,7 @@ For more issues, see [TROUBLESHOOTING.txt](documentation/TROUBLESHOOTING.txt)
 
 ---
 
-## 📜 License
-
-This project is part of an educational initiative for the Ranjana Script Intelligent Handwriting Tutor.
-
-**Permitted Use:**
-- Integration into educational applications
-- Modification for research purposes
-- Deployment in non-commercial projects
-
-**Restrictions:**
-- Public redistribution of trained models requires authorization
-- Commercial use requires explicit permission
-- Attribution must be maintained
-
----
-
-## 👥 Contact
-
-**Project:** Ranjana Script Intelligent Handwriting Tutor  
-**Developer:** Bishwas  
-**Release Date:** October 19, 2025
-
-For questions, issues, or collaboration:
-- Open an issue in the repository
-- Contact the development team
-- Check documentation first
-
----
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Dataset: Ranjana-64 Character Dataset
 - Architecture: EfficientNet (Google Research)
@@ -464,9 +444,10 @@ For questions, issues, or collaboration:
 
 ---
 
-## 📈 Changelog
+## Changelog
 
 ### Version 1.0.0 (October 19, 2025)
+
 - Initial production release
 - Classification accuracy: 99.5%
 - Similarity accuracy: 92.7%
@@ -479,7 +460,5 @@ For questions, issues, or collaboration:
 <div align="center">
 
 **⭐ If this helps your project, please give it a star! ⭐**
-
-Made with ❤️ for the Ranjana Script Community
 
 </div>
