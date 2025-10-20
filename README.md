@@ -536,38 +536,6 @@ For more issues, see [TROUBLESHOOTING.txt](documentation/TROUBLESHOOTING.txt)
 - Framework: PyTorch
 - Grad-CAM: Selvaraju et al., 2017
 
----
-
-## Changelog
-
-### Version 1.0.1 (October 20, 2025) - Verified Release
-
-- **Fixed**: Missing `dataset_utils.py` file
-- **Fixed**: Siamese model checkpoint path bug
-- **Added**: `predict()` method for user-friendly API
-- **Added**: `get_embedding()` method for feature extraction
-- **Added**: `quick_start.py` verification script
-- **Verified**: All 6 capabilities tested and working
-  - Classification: 96%+ confidence
-  - Similarity: 100% for identical images
-  - Grad-CAM: Heatmap generation
-  - Embeddings: 128-dim vectors
-  - Batch processing
-  - Standalone operation
-- **Updated**: Documentation with correct class count (75)
-- **Status**: Production ready and verified standalone
-
-### Version 1.0.0 (October 19, 2025)
-
-- Initial production release
-- Classification accuracy: 99.5%
-- Similarity accuracy: 92.7%
-- Complete API documentation
-- Integration examples for Flask, Django, Flutter
-- Grad-CAM visualization support
-
----
-
 <div align="center">
 
 **If this helps your project, please give it a star!**
