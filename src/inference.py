@@ -12,6 +12,7 @@ from config import MODELS_DIR, IMAGE_SIZE
 from models import get_model
 from data_loader import get_transforms
 from gradcam import GradCAM
+from siamese_network import SiameseNetwork
 
 
 class RanjanaInference:
@@ -87,6 +88,31 @@ class RanjanaInference:
         
         return top_classes, top_probs
     
+    def predict(self, image_path: str, top_k: int = 5):
+        """
+        Alias for classify() with user-friendly return format
+        
+        Args:
+            image_path: Path to image
+            top_k: Number of top predictions
+        
+        Returns:
+            dict: {
+                'class': int (predicted class),
+                'confidence': float (percentage),
+                'top_classes': list[int],
+                'top_confidences': list[float]
+            }
+        """
+        top_classes, top_probs = self.classify(image_path, top_k)
+        
+        return {
+            'class': int(top_classes[0]),
+            'confidence': float(top_probs[0] * 100),
+            'top_classes': top_classes.tolist(),
+            'top_confidences': (top_probs * 100).tolist()
+        }
+    
     def compute_similarity(self, image1_path: str, image2_path: str, 
                           siamese_checkpoint: str = None):
         """
@@ -108,10 +134,10 @@ class RanjanaInference:
             # Auto-detect checkpoint if not provided
             if siamese_checkpoint is None:
                 import glob
-                siamese_runs = sorted(glob.glob(str(MODELS_DIR / "*siamese*efficientnet*")))
+                siamese_runs = sorted(glob.glob(str(MODELS_DIR / "*siamese*efficientnet*.pth")))
                 if not siamese_runs:
                     raise FileNotFoundError("No Siamese model checkpoint found!")
-                siamese_checkpoint = f"{siamese_runs[-1]}/siamese_efficientnet_b0_best.pth"
+                siamese_checkpoint = siamese_runs[-1]  # Use the file path directly
             
             print(f"Loading Siamese model from: {siamese_checkpoint}")
             checkpoint = torch.load(siamese_checkpoint, map_location=self.device)
@@ -199,6 +225,51 @@ class RanjanaInference:
             result['save_path'] = save_path
         
         return result
+    
+    def get_embedding(self, image_path: str, siamese_checkpoint: str = None):
+        """
+        Extract feature embedding for an image using Siamese network
+        
+        Args:
+            image_path: Path to image
+            siamese_checkpoint: Path to Siamese checkpoint (auto-detects if None)
+        
+        Returns:
+            numpy.ndarray: 128-dimensional embedding vector
+        """
+        # Load Siamese model if not already loaded
+        if not hasattr(self, 'siamese_model'):
+            # Auto-detect checkpoint if not provided
+            if siamese_checkpoint is None:
+                import glob
+                siamese_runs = sorted(glob.glob(str(MODELS_DIR / "*siamese*efficientnet*.pth")))
+                if not siamese_runs:
+                    raise FileNotFoundError("No Siamese model checkpoint found!")
+                siamese_checkpoint = siamese_runs[-1]
+            
+            print(f"Loading Siamese model from: {siamese_checkpoint}")
+            self.siamese_model = SiameseNetwork(
+                backbone_name='efficientnet_b0',
+                pretrained=False,
+                num_classes=1,
+                embedding_dim=128
+            )
+            
+            checkpoint = torch.load(siamese_checkpoint, map_location=self.device)
+            self.siamese_model.load_state_dict(checkpoint['model_state_dict'])
+            self.siamese_model.to(self.device)
+            self.siamese_model.eval()
+            print(" Siamese model loaded for embedding extraction")
+        
+        # Load and preprocess image
+        image = Image.open(image_path).convert('L')
+        input_tensor = self.transform(image).unsqueeze(0).to(self.device)
+        
+        # Extract embedding using forward_once
+        with torch.no_grad():
+            embedding = self.siamese_model.forward_once(input_tensor)
+        
+        return embedding.cpu().numpy().flatten()
 
 
 def visualize_predictions(image_path: str, top_classes, top_probs, save_path: str = None):

@@ -3,81 +3,148 @@
                   Ranjana Script Character Reference
 ================================================================================
 
-IMPORTANT: Folders are numbered 1-62, but model outputs 0-61!
+IMPORTANT: Model outputs class IDs from 0-74 (75 total classes)!
 
-To convert:
-  - Model predicts class 0 -> Folder name is "1"
-  - Model predicts class 1 -> Folder name is "2"
-  - Model predicts class 61 -> Folder name is "62"
-
-Formula: folder_name = predicted_class + 1
+The model predicts a class number from 0 to 74. You can map these to your
+own character names or folder structure as needed.
 
 ================================================================================
                      COMPLETE CLASS MAPPING
 ================================================================================
 
-Model Class | Folder Name | Character Type
-------------|-------------|----------------
-     0      |      1      | Consonant
-     1      |      2      | Consonant
-     2      |      3      | Consonant
-     3      |      4      | Consonant
-     4      |      5      | Consonant
-     5      |      6      | Consonant
-     6      |      7      | Consonant
-     7      |      8      | Consonant
-     8      |      9      | Consonant
-     9      |     10      | Consonant
-    10      |     11      | Consonant
-    11      |     12      | Consonant
-    12      |     13      | Consonant
-    13      |     14      | Consonant
-    14      |     15      | Consonant
-    15      |     16      | Consonant
-    16      |     17      | Consonant
-    17      |     18      | Consonant
-    18      |     19      | Consonant
-    19      |     20      | Consonant
-    20      |     21      | Consonant
-    21      |     22      | Consonant
-    22      |     23      | Consonant
-    23      |     24      | Consonant
-    24      |     25      | Consonant
-    25      |     26      | Consonant
-    26      |     27      | Consonant
-    27      |     28      | Consonant
-    28      |     29      | Consonant
-    29      |     30      | Consonant
-    30      |     31      | Consonant
-    31      |     32      | Consonant
-    32      |     33      | Consonant
-    33      |     34      | Consonant
-    34      |     35      | Consonant
-    35      |     36      | Vowel
-    36      |     37      | Vowel
-    37      |     38      | Vowel
-    38      |     39      | Vowel
-    39      |     40      | Vowel
-    40      |     41      | Vowel
-    41      |     42      | Vowel
-    42      |     43      | Vowel
-    43      |     44      | Vowel
-    44      |     45      | Vowel
-    45      |     46      | Vowel
-    46      |     47      | Vowel
-    47      |     48      | Numeral
-    48      |     49      | Numeral
-    49      |     50      | Numeral
-    50      |     51      | Numeral
-    51      |     52      | Numeral
-    52      |     53      | Numeral
-    53      |     54      | Numeral
-    54      |     55      | Numeral
-    55      |     56      | Numeral
-    56      |     57      | Numeral
-    57      |     58      | Special
-    58      |     59      | Special
-    59      |     60      | Special
+Total Classes: 75
+Class Range: 0-74 (inclusive)
+Input Size: 64×64 pixels (grayscale)
+
+Model Class | Character Type | Notes
+------------|----------------|-------
+     0      | Character 1    | 
+     1      | Character 2    |
+     2      | Character 3    |
+     3      | Character 4    |
+     4      | Character 5    |
+     5      | Character 6    |
+     6      | Character 7    |
+     7      | Character 8    |
+     8      | Character 9    |
+     9      | Character 10   |
+    10      | Character 11   |
+    11      | Character 12   |
+    12      | Character 13   |
+    13      | Character 14   |
+    14      | Character 15   |
+    15      | Character 16   |
+    16      | Character 17   |
+    17      | Character 18   |
+    18      | Character 19   |
+    19      | Character 20   |
+    20      | Character 21   |
+    21      | Character 22   |
+    22      | Character 23   |
+    23      | Character 24   |
+    24      | Character 25   |
+    25      | Character 26   |
+    26      | Character 27   |
+    27      | Character 28   |
+    28      | Character 29   |
+    29      | Character 30   |
+    30      | Character 31   |
+    31      | Character 32   |
+    32      | Character 33   |
+    33      | Character 34   |
+    34      | Character 35   |
+    35      | Character 36   |
+    36      | Character 37   |
+    37      | Character 38   |
+    38      | Character 39   |
+    39      | Character 40   |
+    40      | Character 41   |
+    41      | Character 42   |
+    42      | Character 43   |
+    43      | Character 44   |
+    44      | Character 45   |
+    45      | Character 46   |
+    46      | Character 47   |
+    47      | Character 48   |
+    48      | Character 49   |
+    49      | Character 50   |
+    50      | Character 51   |
+    51      | Character 52   |
+    52      | Character 53   |
+    53      | Character 54   |
+    54      | Character 55   |
+    55      | Character 56   |
+    56      | Character 57   |
+    57      | Character 58   |
+    58      | Character 59   |
+    59      | Character 60   |
+    60      | Character 61   |
+    61      | Character 62   |
+    62      | Character 63   |
+    63      | Character 64   |
+    64      | Character 65   |
+    65      | Character 66   |
+    66      | Character 67   |
+    67      | Character 68   |
+    68      | Character 69   |
+    69      | Character 70   |
+    70      | Character 71   |
+    71      | Character 72   |
+    72      | Character 73   |
+    73      | Character 74   |
+    74      | Character 75   | Last class (74 is the highest)
+
+================================================================================
+                     USAGE EXAMPLES
+================================================================================
+
+Example 1: Get predicted class
+-------------------------------
+```python
+import sys
+sys.path.insert(0, 'src')
+from inference import RanjanaInference
+
+model = RanjanaInference('efficientnet_b0')
+result = model.predict('character.png')
+
+print(f"Predicted class: {result['class']}")  # e.g., 39
+print(f"Confidence: {result['confidence']:.2f}%")  # e.g., 95.32%
+```
+
+Example 2: Get top 5 predictions
+---------------------------------
+```python
+classes, probs = model.classify('character.png', top_k=5)
+
+for i, (cls, prob) in enumerate(zip(classes, probs)):
+    print(f"Rank {i+1}: Class {cls} ({prob*100:.2f}%)")
+```
+
+Output:
+  Rank 1: Class 39 (95.32%)
+  Rank 2: Class 41 (2.15%)
+  Rank 3: Class 58 (1.23%)
+  Rank 4: Class 45 (0.89%)
+  Rank 5: Class 49 (0.41%)
+
+================================================================================
+                        IMPORTANT NOTES
+================================================================================
+
+ Model Output: 0-74 (75 classes total, not 62!)
+ Input: 64×64 grayscale images (auto-resized)
+ Confidence: Returned as 0-1 (multiply by 100 for percentage)
+ Top-K: You can request 1-75 top predictions
+
+ Common Mistakes:
+  - Don't assume 62 classes (it's 75!)
+  - Don't forget to add src/ to Python path
+  - Don't confuse folder names with class IDs (they're independent)
+
+================================================================================
+                         END OF MAPPING
+================================================================================
     60      |     61      | Special
     61      |     62      | Special
 

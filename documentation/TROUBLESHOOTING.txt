@@ -5,18 +5,21 @@
 
 This guide covers all the errors you might encounter and how to solve them.
 
+UPDATED: October 20, 2025 - Added new common issues
+
 ================================================================================
                       TABLE OF CONTENTS
 ================================================================================
 
 1. Installation Issues
-2. Model Loading Errors
-3. Inference Errors
-4. Image Processing Errors
-5. Performance Issues
-6. Integration Errors
-7. Debugging Tips
-8. FAQ
+2. Import Errors (MOST COMMON!)
+3. Model Loading Errors
+4. Inference Errors
+5. Image Processing Errors
+6. Performance Issues
+7. Integration Errors
+8. Debugging Tips
+9. FAQ
 
 ================================================================================
                    1. INSTALLATION ISSUES
@@ -96,6 +99,70 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
+
+
+================================================================================
+                   2. IMPORT ERRORS  MOST COMMON!
+================================================================================
+
+ERROR: "ModuleNotFoundError: No module named 'inference'"
+----------------------------------------------------------
+Problem: Python can't find the inference module
+
+Solution: **ALWAYS add src/ to your Python path first!**
+```python
+import sys
+sys.path.insert(0, 'src')  # ← ADD THIS LINE!
+from inference import RanjanaInference
+```
+
+This is THE MOST COMMON mistake! Every script must include this.
+
+
+ERROR: "ImportError: cannot import name 'RanjanaInference'"
+------------------------------------------------------------
+Problem: Trying to import before adding src/ to path
+
+Solution:
+```python
+# WRONG:
+from inference import RanjanaInference  #  Fails
+
+# CORRECT:
+import sys
+sys.path.insert(0, 'src')  #  Add this first
+from inference import RanjanaInference
+```
+
+
+ERROR: "No module named 'dataset_utils'"
+-----------------------------------------
+Problem: Missing dataset_utils.py file (was fixed in v1.0.1)
+
+Solution:
+- Make sure you have the latest DEPLOYMENT_PACKAGE (Oct 20, 2025 or later)
+- Check that src/dataset_utils.py exists
+- If missing, download the complete package again
+
+
+ERROR: "ModuleNotFoundError: No module named 'torch'"
+------------------------------------------------------
+Problem: PyTorch not installed
+
+Solution:
+```bash
+pip install -r requirements.txt
+```
+
+Or manually:
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+```
+
+
+================================================================================
+                   3. MODEL LOADING ERRORS
+================================================================================
 
 
 ================================================================================
@@ -352,6 +419,96 @@ python stress_test.py
 ================================================================================
 
 Q: Why are my predictions wrong?
+A: Check these:
+   - Is image the right size? (Auto-resized to 64×64)
+   - Is it grayscale? (Auto-converted)
+   - Is the character clearly visible?
+   - Model outputs 0-74 (75 classes total, not 62!)
+
+Q: How do I know which class is which character?
+A: See CLASS_MAPPING.txt for the mapping between class IDs and characters.
+
+Q: Can I use GPU?
+A: Yes! Just pass device='cuda':
+   model = RanjanaInference('efficientnet_b0', device='cuda')
+
+Q: How fast is inference?
+A: CPU: ~50ms per image
+   GPU: ~5ms per image
+   Batch: ~20ms per image (CPU)
+
+Q: What's the difference between classify() and predict()?
+A: predict() returns a dict (user-friendly)
+   classify() returns numpy arrays (programmatic)
+   Both do the same thing internally!
+
+Q: How do I get the embedding vector?
+A: Use get_embedding():
+   embedding = model.get_embedding('image.png')  # Returns 128-dim array
+
+Q: Why 128 dimensions for embeddings?
+A: The neural network compresses 64×64 pixels (4,096 values) into 128
+   meaningful features. This captures the "essence" of the character while
+   being 32× smaller, making comparisons much faster!
+
+Q: Is this package standalone?
+A: YES! 100% standalone. No training code or datasets needed.
+   Just: pip install -r requirements.txt and you're ready!
+
+Q: Can I share just this DEPLOYMENT_PACKAGE folder?
+A: Absolutely! That's exactly what it's designed for.
+   Recipients just need Python 3.7+ and pip install -r requirements.txt
+
+Q: Where's the training code?
+A: Not included in deployment package. This is inference-only.
+   Models are pre-trained and ready to use.
+
+Q: How do I verify everything works?
+A: Run: python quick_start.py
+   It will test all 6 capabilities and show  if working.
+
+Q: What if I get "No such file or directory" errors?
+A: Make sure you're running from the DEPLOYMENT_PACKAGE directory:
+   cd DEPLOYMENT_PACKAGE
+   python your_script.py
+
+
+================================================================================
+                    STILL HAVING ISSUES?
+================================================================================
+
+1. Run the verification script:
+   python quick_start.py
+
+2. Check you're in the right directory:
+   cd DEPLOYMENT_PACKAGE
+   ls -la  # Should see models/, src/, etc.
+
+3. Verify Python version:
+   python --version  # Should be 3.7+
+
+4. Check all dependencies installed:
+   pip list | grep torch
+   pip list | grep torchvision
+
+5. Try a minimal example:
+   ```python
+   import sys
+   sys.path.insert(0, 'src')
+   from inference import RanjanaInference
+   
+   model = RanjanaInference('efficientnet_b0', device='cpu')
+   print(" Model loaded successfully!")
+   ```
+
+6. Check the VERIFICATION_REPORT.md to see what was tested
+
+If nothing works, you may have an incomplete package.
+Re-download the complete DEPLOYMENT_PACKAGE (Oct 20, 2025 version).
+
+================================================================================
+                        END OF GUIDE
+================================================================================
 ---------------------------------
 A: Check these in order:
    1. Image is 64×64? (will be resized automatically)

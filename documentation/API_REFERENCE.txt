@@ -6,17 +6,30 @@
 This document provides detailed API reference for all functions in the
 inference.py module - your main interface to the AI models.
 
+UPDATED: October 20, 2025 - Added predict() and get_embedding() methods
+
 ================================================================================
                       TABLE OF CONTENTS
 ================================================================================
 
 1. RanjanaInference Class
 2. Classification Methods
+   - classify() - Returns arrays
+   - predict() - Returns dict (NEW!)
+   - classify_batch() - Batch processing
 3. Similarity Methods
+   - compute_similarity() - Compare two images
 4. Grad-CAM Methods
-5. Utility Methods
+   - generate_gradcam() - Visual explanations
+5. Embedding Methods (NEW!)
+   - get_embedding() - Extract 128-dim features
 6. Code Examples
 7. Return Value Reference
+
+IMPORTANT: Always add src/ to Python path first!
+  import sys
+  sys.path.insert(0, 'src')
+  from inference import RanjanaInference
 
 ================================================================================
                  1. RANJANA INFERENCE CLASS
@@ -81,11 +94,11 @@ Parameters:
   
   - top_k (int, optional): Number of top predictions to return
       Default: 5
-      Range: 1-62
+      Range: 1-75
 
 Returns:
   Tuple of (classes, probabilities):
-    - classes (numpy.ndarray): Top K predicted class IDs (0-61)
+    - classes (numpy.ndarray): Top K predicted class IDs (0-74)
         Shape: (top_k,)
         dtype: int64
     
@@ -107,9 +120,39 @@ for i, (cls, prob) in enumerate(zip(classes, probs)):
 ```
 
 Important Notes:
-- Class IDs are 0-indexed (0-61), but folder names are 1-62!
-- To get folder name: folder_id = class_id + 1
-- Confidence scores sum to ~1.0 across all 62 classes
+- Class IDs range from 0-74 (75 total classes)
+- Confidence scores sum to ~1.0 across all 75 classes
+
+
+predict(image_path, top_k=5)   NEW USER-FRIENDLY METHOD!
+------------------------------------------------------------
+
+Same as classify() but returns a dictionary (easier to use!).
+
+Parameters:
+  - image_path (str or PIL.Image): Path to image file OR PIL Image object
+  - top_k (int, optional): Number of top predictions (default: 5)
+
+Returns:
+  Dictionary with keys:
+    - 'class' (int): Predicted class ID (0-74)
+    - 'confidence' (float): Confidence percentage (0-100)
+    - 'top_classes' (list): List of top K class IDs
+    - 'top_confidences' (list): List of top K confidence percentages
+
+Example:
+```python
+# User-friendly interface
+result = model.predict('character.png')
+
+print(f"Class: {result['class']}")              # e.g., 39
+print(f"Confidence: {result['confidence']:.2f}%")  # e.g., 95.32%
+print(f"Top 3: {result['top_classes'][:3]}")    # e.g., [39, 41, 58]
+```
+
+When to use:
+- Use predict() for single predictions (returns dict)
+- Use classify() when you need raw numpy arrays
 
 
 classify_batch(image_paths, top_k=5, batch_size=32)
@@ -286,6 +329,126 @@ Use Cases:
 - Verify model looks at correct features
 - Educational: show students what to focus on
 - Research: understand model behavior
+
+
+================================================================================
+                   5. EMBEDDING METHODS  NEW!
+================================================================================
+
+get_embedding(image_path, siamese_checkpoint=None)
+---------------------------------------------------
+
+Extract 128-dimensional feature vector from an image using the Siamese network.
+
+This compresses a 64×64 image (4,096 pixels) into 128 meaningful features
+that capture the essence of the character. Useful for similarity search,
+clustering, and feature-based analysis.
+
+Parameters:
+  - image_path (str or PIL.Image): Image to extract features from
+  
+  - siamese_checkpoint (str, optional): Path to Siamese model checkpoint
+      If None, auto-detects from models/ directory
+
+Returns:
+  numpy.ndarray: 128-dimensional feature vector
+    Shape: (128,)
+    dtype: float32
+    Range: Typically -1 to 1 (L2-normalized)
+
+Example:
+```python
+# Extract embedding from single image
+embedding = model.get_embedding('character.png')
+
+print(f"Shape: {embedding.shape}")  # (128,)
+print(f"First 5 features: {embedding[:5]}")
+# Output: [-0.234, 0.567, -0.891, 0.123, 0.456]
+```
+
+Use Cases:
+
+1. Find Similar Characters:
+```python
+# Get embeddings for all reference images
+ref_embeddings = {}
+for img in reference_images:
+    ref_embeddings[img] = model.get_embedding(img)
+
+# Compare student's character
+student_emb = model.get_embedding('student_char.png')
+
+# Find most similar
+distances = {}
+for name, ref_emb in ref_embeddings.items():
+    dist = np.linalg.norm(student_emb - ref_emb)
+    distances[name] = dist
+
+best_match = min(distances, key=distances.get)
+print(f"Most similar to: {best_match}")
+```
+
+2. Cluster Characters:
+```python
+# Extract embeddings for many characters
+embeddings = [model.get_embedding(img) for img in image_list]
+
+# Use scikit-learn for clustering
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=5)
+clusters = kmeans.fit_predict(embeddings)
+```
+
+3. Dimensionality Reduction Visualization:
+```python
+# Visualize character relationships
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+
+embeddings = np.array([model.get_embedding(img) for img in images])
+tsne = TSNE(n_components=2)
+coords = tsne.fit_transform(embeddings)
+
+plt.scatter(coords[:, 0], coords[:, 1])
+plt.show()
+```
+
+Important Notes:
+- Input: 64×64 pixels (4,096 values) → Output: 128 features (32× compression!)
+- Features are learned, not manually designed
+- L2-normalized: Each feature vector has unit length
+- Same character → similar embeddings (small distance)
+- Different characters → different embeddings (large distance)
+
+
+================================================================================
+                   6. UTILITY METHODS
+================================================================================
+
+preprocess_image(image_path)
+-----------------------------
+
+Internal method - you usually don't call this directly.
+
+Converts image to model-ready tensor.
+
+Parameters:
+  - image_path (str or PIL.Image): Input image
+
+Returns:
+  Tuple of (tensor, image):
+    - tensor (torch.Tensor): Shape (1, 1, 64, 64), dtype float32
+        Normalized with mean=0.2611, std=0.4186
+    
+    - image (PIL.Image): Resized 64×64 grayscale image
+
+Example:
+```python
+tensor, image = model.preprocess_image('character.png')
+print(tensor.shape)  # torch.Size([1, 1, 64, 64])
+print(tensor.dtype)  # torch.float32
+print(tensor.min(), tensor.max())  # Normalized values
+```
 
 
 ================================================================================
