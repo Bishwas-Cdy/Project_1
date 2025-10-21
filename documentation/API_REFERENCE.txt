@@ -94,11 +94,11 @@ Parameters:
   
   - top_k (int, optional): Number of top predictions to return
       Default: 5
-      Range: 1-75
+      Range: 1-62
 
 Returns:
   Tuple of (classes, probabilities):
-    - classes (numpy.ndarray): Top K predicted class IDs (0-74)
+    - classes (numpy.ndarray): Top K predicted class IDs (0-61)
         Shape: (top_k,)
         dtype: int64
     
@@ -120,8 +120,8 @@ for i, (cls, prob) in enumerate(zip(classes, probs)):
 ```
 
 Important Notes:
-- Class IDs range from 0-74 (75 total classes)
-- Confidence scores sum to ~1.0 across all 75 classes
+- Class IDs range from 0-61 (62 total classes)
+- Confidence scores sum to ~1.0 across all 62 classes
 
 
 predict(image_path, top_k=5)   NEW USER-FRIENDLY METHOD!
@@ -135,7 +135,7 @@ Parameters:
 
 Returns:
   Dictionary with keys:
-    - 'class' (int): Predicted class ID (0-74)
+    - 'class' (int): Predicted class ID (0-61)
     - 'confidence' (float): Confidence percentage (0-100)
     - 'top_classes' (list): List of top K class IDs
     - 'top_confidences' (list): List of top K confidence percentages

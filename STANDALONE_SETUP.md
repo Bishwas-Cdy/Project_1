@@ -82,7 +82,7 @@ embedding = model.get_embedding('image.png')  # Returns 128-dim vector
 
 ## Features
 
-- **Classification**: 99.5% accuracy on 75 Ranjana character classes
+- **Classification**: 99.5% accuracy on 62 Ranjana character classes
 - **Similarity Matching**: 92.7% accuracy for finding similar characters
 - **Grad-CAM**: Visual explanations of model predictions
 - **Embeddings**: 128-dimensional feature vectors for any image
@@ -132,7 +132,7 @@ This package has been tested and verified:
 
 - Classification Accuracy: **99.50%**
 - Similarity Accuracy: **92.71%**
-- Validated on: 75 character classes
+- Validated on: 62 character classes
 - Input: 64×64 grayscale images
 
 **Built with:** PyTorch 2.0, EfficientNet-B0 backbone, Siamese architecture

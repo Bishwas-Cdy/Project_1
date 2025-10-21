@@ -35,7 +35,7 @@
 
 ## Overview
 
-This deployment package provides state-of-the-art deep learning models for Ranjana script character recognition and analysis. The system achieves **99.5% classification accuracy** and **92.7% similarity detection accuracy** on 75 Ranjana character classes.
+This deployment package provides state-of-the-art deep learning models for Ranjana script character recognition and analysis. The system achieves **99.5% classification accuracy** and **92.7% similarity detection accuracy** on 62 Ranjana character classes.
 
 **This package is 100% standalone** - no training code or datasets required!
 
@@ -57,7 +57,7 @@ The package includes:
 
 | Feature                    | Description                                        | Accuracy | Status |
 | -------------------------- | -------------------------------------------------- | -------- | ------ |
-| **Classification**         | Identifies which of 75 Ranjana characters          | 99.5%    | Working     |
+| **Classification**         | Identifies which of 62 Ranjana characters          | 99.5%    | Working     |
 | **Similarity Scoring**     | Compares visual similarity between characters      | 92.7%    | Working     |
 | **Grad-CAM Visualization** | Shows model attention regions for interpretability | N/A      | Working     |
 | **Embedding Extraction**   | Extract 128-dimensional feature vectors            | N/A      | Working     |
@@ -81,7 +81,7 @@ The package includes:
 Test Accuracy:        99.50%
 Validation Accuracy:  98.75% (from checkpoint)
 Verified Inference:   96%+ confidence on test images
-Number of Classes:    75 (not 62)
+Number of Classes:    62 (model outputs 0-61)
 Model Size:           47 MB
 Status:              Working perfectly
 ```
@@ -343,7 +343,7 @@ See [`documentation/INTEGRATION_GUIDE.txt`](documentation/INTEGRATION_GUIDE.txt)
 EfficientNet-B0 (ImageNet pretrained)
  Input: 64x64 grayscale image
  Backbone: EfficientNet-B0 (modified for grayscale)
- Output: 75 classes (Ranjana characters)
+ Output: 62 classes (Ranjana characters)
  Training: Cross-entropy loss, Adam optimizer
 ```
 
@@ -413,7 +413,7 @@ DEPLOYMENT_PACKAGE/
 | [API Reference](documentation/API_REFERENCE.txt)         | Complete function documentation with examples |
 | [Integration Guide](documentation/INTEGRATION_GUIDE.txt) | Flask, Django, and Flutter integration steps  |
 | [Troubleshooting](documentation/TROUBLESHOOTING.txt)     | Common errors and solutions                   |
-| [Class Mapping](documentation/CLASS_MAPPING.txt)         | Character class ID mappings (0-74)            |
+| [Class Mapping](documentation/CLASS_MAPPING.txt)         | Character class ID mappings (0-61)            |
 
 ---
 
@@ -434,7 +434,7 @@ Edit `config.yaml` to customize:
 ```yaml
 dataset:
   image_size: 64 # Input image dimensions
-  num_classes: 75 # Number of character classes
+  num_classes: 62 # Number of character classes
 
 model:
   architecture: efficientnet_b0
@@ -523,7 +523,7 @@ python quick_start.py
 
 - Ensure images are 64x64 pixels (auto-resized)
 - Verify grayscale conversion (automatic)
-- Check class mapping: Model outputs 0-74
+- Check class mapping: Model outputs 0-61
 
 For more issues, see [TROUBLESHOOTING.txt](documentation/TROUBLESHOOTING.txt)
 

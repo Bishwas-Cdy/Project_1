@@ -20,7 +20,7 @@
   - API_REFERENCE.txt - Complete function documentation (6 methods)
   - INTEGRATION_GUIDE.txt - How to integrate with Flutter/Django
   - TROUBLESHOOTING.txt - Common errors and solutions
-  - CLASS_MAPPING.txt - Class ID to folder name mapping (0-74)
+  - CLASS_MAPPING.txt - Class ID to folder name mapping (0-61)
   - STANDALONE_SETUP.md - Setup guide for recipients
   - VERIFICATION_REPORT.md - Testing proof (all 6 tests passed)
 
@@ -30,7 +30,7 @@
   - example_batch_processing.py - Batch processing examples
 
  CONFIGURATION
-  - config.yaml - Model configuration (75 classes)
+  - config.yaml - Model configuration (62 classes)
   - requirements.txt - Python dependencies (complete list)
 
  VERIFICATION
@@ -44,7 +44,7 @@ Classification Model:
    Training Accuracy: 99.50%
    Validation Accuracy: 98.75% (from checkpoint)
    Verified Inference: 96%+ confidence on test images
-   Number of Classes: 75 (not 62!)
+   Number of Classes: 62 (model outputs 0-61)
    Inference Speed: ~50ms per image (CPU)
    Status:  Working perfectly
 

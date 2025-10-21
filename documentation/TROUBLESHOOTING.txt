@@ -423,7 +423,8 @@ A: Check these:
    - Is image the right size? (Auto-resized to 64×64)
    - Is it grayscale? (Auto-converted)
    - Is the character clearly visible?
-   - Model outputs 0-74 (75 classes total, not 62!)
+   - Model outputs 0-61 (62 classes total)
+   - If dataset folders are named 1-62, add 1 to model output
 
 Q: How do I know which class is which character?
 A: See CLASS_MAPPING.txt for the mapping between class IDs and characters.

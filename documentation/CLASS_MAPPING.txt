@@ -3,17 +3,17 @@
                   Ranjana Script Character Reference
 ================================================================================
 
-IMPORTANT: Model outputs class IDs from 0-74 (75 total classes)!
+IMPORTANT: Model outputs class IDs from 0-61 (62 total classes)!
 
-The model predicts a class number from 0 to 74. You can map these to your
-own character names or folder structure as needed.
+The model predicts a class number from 0 to 61. You can map these to your
+actual character labels using a mapping dictionary or file.
 
 ================================================================================
                      COMPLETE CLASS MAPPING
 ================================================================================
 
-Total Classes: 75
-Class Range: 0-74 (inclusive)
+Total Classes: 62
+Class Range: 0-61 (inclusive)
 Input Size: 64×64 pixels (grayscale)
 
 Model Class | Character Type | Notes
@@ -79,20 +79,7 @@ Model Class | Character Type | Notes
     58      | Character 59   |
     59      | Character 60   |
     60      | Character 61   |
-    61      | Character 62   |
-    62      | Character 63   |
-    63      | Character 64   |
-    64      | Character 65   |
-    65      | Character 66   |
-    66      | Character 67   |
-    67      | Character 68   |
-    68      | Character 69   |
-    69      | Character 70   |
-    70      | Character 71   |
-    71      | Character 72   |
-    72      | Character 73   |
-    73      | Character 74   |
-    74      | Character 75   | Last class (74 is the highest)
+    61      | Character 62   | Last class (61 is the highest)
 
 ================================================================================
                      USAGE EXAMPLES
@@ -132,15 +119,20 @@ Output:
                         IMPORTANT NOTES
 ================================================================================
 
- Model Output: 0-74 (75 classes total, not 62!)
+ CRITICAL INFORMATION:
+======================================================================
+ Model Output: 0-61 (62 classes total)
+ Dataset folders: 1-62 (1-indexed naming)
+ Model uses 0-based indexing: predicted_class + 1 = folder_number
+======================================================================
  Input: 64×64 grayscale images (auto-resized)
  Confidence: Returned as 0-1 (multiply by 100 for percentage)
- Top-K: You can request 1-75 top predictions
+ Top-K: You can request 1-62 top predictions
 
  Common Mistakes:
-  - Don't assume 62 classes (it's 75!)
+  - Model has 62 classes (outputs 0-61)
   - Don't forget to add src/ to Python path
-  - Don't confuse folder names with class IDs (they're independent)
+  - Remember: folder_number = class_id + 1
 
 ================================================================================
                          END OF MAPPING
